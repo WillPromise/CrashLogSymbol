@@ -306,8 +306,8 @@ for path_line in "${path_result[@]}"; do
 			if xcrun atos -arch "$my_arch" -o "$bin_file" -l "$loader_addr" "$addr" >> "$atos_out" || true ; then
 				if [ -f "$atos_out" ]; then
 					sym_line=$(cat "$atos_out")
-					[ $is_crash -eq 1 ] && sym_line="$(echo "$unsym_line" | sed -E "s#$loader_addr_regex.*#$sym_line#")"
-					[ $is_sample -eq 1 ] && sym_line="$(echo "$unsym_line" | sed -E "s#(.*)[?]{3}.*$loader_addr_regex(.*)#\1$sym_line\3#")"
+					[ $is_crash -eq 1 ] && sym_line="$(echo "$unsym_line" | sed -E "s/$loader_addr_regex.*/$sym_line/")"
+					[ $is_sample -eq 1 ] && sym_line="$(echo "$unsym_line" | sed -E "s/(.*)[?]{3}.*$loader_addr_regex(.*)/\1$sym_line\3/")"
 					print_out_info "${BOLD}BEFORE${RESET}: $unsym_line"
 					print_out_info "${BOLD}AFTER${RESET} : $sym_line"
 					print_out ""
